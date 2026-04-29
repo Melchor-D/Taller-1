@@ -30,7 +30,6 @@ function mostrarMenu (){
 
 mostrarMenu()
 
-RegistroDeUsuaro()
-function RegistroDeUsuario(){
-
+function RegistroDeUsuario(callback){
+   let nombre =" "
 }

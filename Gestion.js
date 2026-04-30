@@ -1,89 +1,157 @@
-let huesped = [];
-function mostrarMenu (){
-    let opc = prompt (
-        '*****REGISTRO DE HOTEL OASIS*****\n 1. Registro de Habitacion\n 2. Lista de Habitacion\n 3. Buscar habitacion por numero\n 4. Cambiar estado de una Habitacion\n 5. Eliminar Habitacion\n 6. salir'
-    );
-    switch(opc){
-        case "1":
-            RegistroDeUsuario(mostrarMenu);
-            break;
-        case "2":
-            mostrarHuespedes(mostrarMenu);
-            break;
-         case "3":
-            console.log ("mostrar habitaciones ocupadas")
-            break;
-         case "4":
-            console.log ("mostrar la disponibilidad de la habitacion")
-            break;
-         case "5":
-            console.log ("quitar habitacion")
-            break;
-         case "6":
-            console.log ("salir")
-            break;
-         default:
-            console.log ("ingrese un valor valido")
-            mostrarMenu();
-    }
+let habitaciones = [];
+
+function mostrarMenu() {
+   let opc = prompt(
+      '*****REGISTRO DE HOTEL OASIS*****\n' + '1. Registrar Habitacion\n' + '2. Listar Habitaciones\n' + '3. Buscar Habitacion por numero\n' + '4. Cambiar estado de Habitacion\n' + '5. Eliminar Habitacion\n' +  '6. Salir'
+   );
+
+   switch (opc) {
+      case "1":
+         registrarHabitacion(mostrarMenu);
+         break;
+      case "2":
+         listarHabitaciones(mostrarMenu);
+         break;
+      case "3":
+         buscarHabitacion(mostrarMenu);
+         break;
+      case "4":
+         cambiarEstado(mostrarMenu);
+         break;
+      case "5":
+         eliminarHabitacion(mostrarMenu);
+         break;
+      case "6":
+         console.log("Salir");
+         break;
+      default:
+         console.log("Ingrese un valor valido");
+         mostrarMenu();
+   }
 }
 
-mostrarMenu()
+mostrarMenu();
 
-function RegistroDeUsuario(callback){
-   let numero =prompt("Ingresa numero de Habitacio")
-   let tipo =prompt("Tipo de Habitacion:\n1. Sencilla\n 2.Doble\n 3. Suite\n") 
-   switch(tipo){
+function registrarHabitacion(callback) {
+   let numero = prompt("Numero de habitacion:");
 
-      case"1":
-         tipo ="Sencilla"
+   let tipo = prompt("Tipo:\n1. Sencilla\n2. Doble\n3. Suite");
+   switch (tipo) {
+      case "1": 
+         tipo = "Sencilla"; 
          break;
-
-      case"2":
-         tipo ="Doble"
+      case "2": 
+         tipo = "Doble";
          break;
-
-      case"3":
-         tipo="Suite"
+      case "3":
+         tipo = "Suite"; 
          break;
    }
-   let PrecioNoche =prompt("Ingrese precio de habitacion")
-   let estado =prompt("Estado de Habiacion:\n1. libre\n 2.ocuapada\n 3.limpieza\n")
-   switch(estado){
-      case"1":
-         estado="Libre"
+
+   let precioNoche = prompt("Precio por noche:");
+
+   let estado = prompt("Estado:\n1. Libre\n2. Ocupada\n3. Limpieza");
+   switch (estado) {
+      case "1": 
+         estado = "Libre"; 
          break;
-      case"2":
-         estado="Ocupada"
+      case "2": 
+         estado = "Ocupada"; 
          break;
-      case"3":
-         estado="Limpieza"
+      case "3": 
+         estado = "Limpieza"; 
          break;
    }
-   let huesped2 = prompt("Nombre: ")
 
-   let registro = {numero, tipo, PrecioNoche, estado, huesped2}
+   let huesped = (estado === "Ocupada") ? prompt("Nombre del huesped:") : "";
 
-   setTimeout(function(){
-      huesped.push(registro)
-      console.log("Habitación " + numero + " registrada")     
-      console.log("Lista completa de huéspedes:")
-      console.table(huesped)
-         callback();   
-   },2000);
+   console.log("Validando informacion...");
+
+   let habitacion = { numero, tipo, precioNoche, estado, huesped };
+
+   setTimeout(function () {
+      habitaciones.push(habitacion);
+      console.log("Habitacion registrada correctamente");
+      callback();
+   }, 2000);
 }
 
-function mostrarHuespedes (callback){
-   let nombre = prompt("-----Ingreso de Habitaciones-----")
-   registro.forEach(registro => {
-      console.log(registro.numero, registro.tipo, registro.PrecioNoche, registro.estado)
-   });
+function listarHabitaciones(callback) {
+   console.log("----- LISTADO DE HABITACIONES -----");
+
+   if (habitaciones.length === 0) {
+      console.log("No existen registros");
+   } else {
+      habitaciones.forEach(h => {
+         console.log(h.numero, h.tipo, h.precioNoche, h.estado, h.huesped);
+      });
+   }
+
    callback();
-
-
-function buscarHabitacion (callback){
-let nombre2 = prompt
-()
-}
 }
 
+function buscarHabitacion(callback) {
+   let numero = prompt("Numero de habitacion a buscar:");
+   console.log("Consultando base de datos...");
+
+   setTimeout(function () {
+      let encontrada = habitaciones.find(h => h.numero == numero);
+
+      if (encontrada) {
+         console.log(encontrada.numero, encontrada.tipo, encontrada.precioNoche, encontrada.estado, encontrada.huesped);
+      } else {
+         console.log("Habitacion no encontrada");
+      }
+
+      callback();
+   }, 2000);
+}
+
+function cambiarEstado(callback) {
+   let numero = prompt("Numero de habitacion:");
+   console.log("Esperando al personal del hotel...");
+
+   setTimeout(function () {
+      let habitacion = habitaciones.find(h => h.numero == numero);
+
+      if (habitacion) {
+         let nuevoEstado = prompt("Nuevo estado:\n1. Libre\n2. Ocupada\n3. Limpieza");
+
+         switch (nuevoEstado) {
+            case "1":
+               habitacion.estado = "Libre";
+               habitacion.huesped = "";
+               break;
+            case "2":
+               habitacion.estado = "Ocupada";
+               habitacion.huesped = prompt("Nombre del huesped:");
+               break;
+            case "3":
+               habitacion.estado = "Limpieza";
+               habitacion.huesped = "";
+               break;
+         }
+
+         console.log("Estado actualizado");
+      } else {
+         console.log("Habitacion no encontrada");
+      }
+
+      callback();
+   }, 3000);
+}
+
+function eliminarHabitacion(callback) {
+   let numero = prompt("Numero de habitacion a eliminar:");
+
+   let index = habitaciones.findIndex(h => h.numero == numero);
+
+   if (index !== -1) {
+      habitaciones.splice(index, 1);
+      console.log("Habitacion eliminada");
+   } else {
+      console.log("Habitacion no encontrada");
+   }
+
+   callback();
+}
